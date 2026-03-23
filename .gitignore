@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Secrets
+.env
+*.env
+secrets.json
+config.local.json
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated visuals / outputs
+ionq_visuals/
+charts/
+figures/
+outputs/
+exports/
+archive/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+quantum_jobs.db
+
+# Logs
+*.log
+
+# Python packaging
+dist/
+build/
+*.egg-info/
+
+# Large files (optional safety)
+*.csv
+*.parquet
+
