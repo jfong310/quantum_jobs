@@ -11,8 +11,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Stable aliases for legacy files while we migrate to package-based modules.
 LEGACY_FILES = {
-    "collector": REPO_ROOT / "Quantum Jobs Collector.py",
-    "migrations": REPO_ROOT / "migration_utils.py",
+    "collector": REPO_ROOT / "legacy" / "collector_legacy.py",
+    "migrations": REPO_ROOT / "legacy" / "migration_utils_legacy.py",
 }
 
 
