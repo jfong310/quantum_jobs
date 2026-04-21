@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from quantum_jobs.cli.migrate import main
+from quantum_jobs.collector import main
 
 
 if __name__ == "__main__":
