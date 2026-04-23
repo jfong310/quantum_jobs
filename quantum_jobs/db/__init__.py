@@ -16,7 +16,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
     """
     Create the collector base tables and indexes if they do not exist.
 
-    `pulled_date` is part of the base table shape for fresh database bootstrap.
+`pulled_date` is a derived convenience field from `pulled_at` and is part of
+the base table shape for fresh database bootstrap.
     """
     conn.executescript(
         """
