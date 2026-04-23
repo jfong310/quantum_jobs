@@ -20,14 +20,8 @@ How to run:
 Make sure DB_PATH points at the same DB file your collector uses.
 """
 
-from pathlib import Path
-
 from migration_utils import connect_db, run_all_migrations
-
-
-# Keep this consistent with your collector script.
-SCRIPT_DIR = Path(__file__).resolve().parent
-DB_PATH = SCRIPT_DIR / "quantum_jobs.db"
+from quantum_jobs.db.paths import DB_PATH
 
 
 def main() -> None:

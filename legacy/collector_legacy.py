@@ -6,9 +6,10 @@ from typing import Dict, Any, List, Optional, Protocol
 from pathlib import Path
 import logging
 
+from quantum_jobs.db.paths import DB_PATH
+
 # ---- PATH CONFIGURATION ----
 SCRIPT_DIR = Path(__file__).resolve().parent
-DB_PATH = SCRIPT_DIR / "quantum_jobs.db"
 
 # ---- LOGGING SETUP ----
 logging.basicConfig(
