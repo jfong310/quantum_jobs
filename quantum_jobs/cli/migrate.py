@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from quantum_jobs import migrations
-
-
-SCRIPT_DIR = Path(__file__).resolve().parents[2]
-DB_PATH = SCRIPT_DIR / "quantum_jobs.db"
+from quantum_jobs.db.paths import DB_PATH
 
 
 def main() -> None:

@@ -6,9 +6,10 @@ from typing import Dict, Any, List, Optional, Protocol
 from pathlib import Path
 import logging
 
+from quantum_jobs.db.paths import DB_PATH
+
 # ---- PATH CONFIGURATION ----
 SCRIPT_DIR = Path(__file__).resolve().parent
-DB_PATH = SCRIPT_DIR / "quantum_jobs.db"
 
 # ---- LOGGING SETUP ----
 logging.basicConfig(
@@ -45,7 +46,7 @@ def connect_db(path: Path) -> sqlite3.Connection:
 
 def init_schema(conn: sqlite3.Connection) -> None:
     """
-    Ensures pulled_date exists in schema (your inserts require it).
+    Create the collector base tables and indexes if they do not exist.
     """
     conn.executescript(
         """
@@ -119,17 +120,6 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON job_current(company);
         """
     )
-
-    # Best-effort migration for existing DBs missing pulled_date columns.
-    try:
-        conn.execute("ALTER TABLE job_snapshots ADD COLUMN pulled_date TEXT;")
-    except sqlite3.OperationalError:
-        pass
-
-    try:
-        conn.execute("ALTER TABLE job_current ADD COLUMN pulled_date TEXT;")
-    except sqlite3.OperationalError:
-        pass
 
     conn.commit()
 
