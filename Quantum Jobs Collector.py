@@ -10,4 +10,6 @@ from legacy.collector_legacy import *  # noqa: F401,F403
 
 
 if __name__ == "__main__":
-    main()
+    from quantum_jobs.collector import main as collect_main
+
+    collect_main()

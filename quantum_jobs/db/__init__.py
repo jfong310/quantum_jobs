@@ -14,9 +14,10 @@ def connect_db(path: str) -> sqlite3.Connection:
 
 def init_schema(conn: sqlite3.Connection) -> None:
     """
-    Create/upgrade the collector tables.
+    Create the collector base tables and indexes if they do not exist.
 
-    `pulled_date` is a derived convenience field from `pulled_at` for grouping.
+`pulled_date` is a derived convenience field from `pulled_at` and is part of
+the base table shape for fresh database bootstrap.
     """
     conn.executescript(
         """
@@ -90,17 +91,6 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON job_current(company);
         """
     )
-
-    # Best-effort migration for existing DBs missing pulled_date columns.
-    try:
-        conn.execute("ALTER TABLE job_snapshots ADD COLUMN pulled_date TEXT;")
-    except sqlite3.OperationalError:
-        pass
-
-    try:
-        conn.execute("ALTER TABLE job_current ADD COLUMN pulled_date TEXT;")
-    except sqlite3.OperationalError:
-        pass
 
     conn.commit()
 
