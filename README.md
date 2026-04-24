@@ -1,174 +1,72 @@
-\# Quantum Jobs Tracker
+# Quantum Jobs Tracker
 
+A data-driven tool for collecting and analyzing hiring trends across quantum computing companies.
 
+## Canonical runtime entry points (Phase 1–4 state)
 
-A data-driven intelligence tool for analyzing hiring trends across quantum computing companies.
+Use these package-aligned scripts as the primary operational entry points:
 
+- Collector: `python scripts/run_collector.py`
+- Migrations: `python scripts/run_migrations.py`
 
+Legacy compatibility entry points are still present for backward compatibility during the refactor window:
 
-\## Overview
+- `Quantum Jobs Collector.py`
+- `run_migrations.py`
+- `migration_utils.py`
+- `collectors/sources/*` shims
 
+## Project structure (current)
 
+```text
+quantum_jobs/
+├── quantum_jobs/
+│   ├── cli/
+│   │   ├── collect.py
+│   │   └── migrate.py
+│   ├── db/
+│   │   ├── __init__.py
+│   │   └── paths.py
+│   ├── sources/
+│   ├── collector.py
+│   └── migrations.py
+├── scripts/
+│   ├── run_collector.py
+│   └── run_migrations.py
+├── legacy/
+│   ├── collector_legacy.py
+│   └── migration_utils_legacy.py
+└── tests/
+```
 
-The Quantum Jobs Tracker collects and analyzes job postings from leading quantum computing companies to provide insight into:
+## Database path behavior
 
+The canonical runtime DB path is centralized at:
 
+- `quantum_jobs.db.paths.DB_PATH`
 
-\- Company maturity and growth signals
+It intentionally resolves to the repository root file:
 
-\- Shifts in technical and operational priorities
+- `<repo-root>/quantum_jobs.db`
 
-\- Hiring trends across functions (engineering, research, product, etc.)
+This behavior is preserved for compatibility.
 
-\- Market-wide dynamics in the quantum ecosystem
+## Windows Task Scheduler guidance
 
+For reliability, run scripts through Python and quote full paths (especially filenames with spaces):
 
+```powershell
+python "C:\path\to\quantum_jobs\scripts\run_migrations.py"
+python "C:\path\to\quantum_jobs\scripts\run_collector.py"
+```
 
-This project is designed as both:
+Legacy file with spaces should also be quoted if used:
 
-1\. A \*\*quantitative research tool\*\* for analyzing emerging technology markets  
+```powershell
+python "C:\path\to\quantum_jobs\Quantum Jobs Collector.py"
+```
 
-2\. A \*\*framework for competitive intelligence\*\* in frontier industries  
+## Notes
 
-
-
-\---
-
-
-
-\## Key Features
-
-
-
-\- Automated data collection from job board APIs (Greenhouse, Lever, etc.)
-
-\- Structured database of job postings over time
-
-\- Snapshot-based tracking for temporal analysis
-
-\- Visualization of hiring trends and role distribution
-
-\- Modular architecture for adding new companies and data sources
-
-
-
-\---
-
-
-
-\## Project Structure
-
-Quantum Jobs/
-
-├── collectors/ # Source adapters (Greenhouse, Lever, etc.)
-
-├── Quantum Jobs Collector.py # Main data collection script
-
-├── migration\_utils.py # Database schema management
-
-├── run\_migrations.py # Migration runner
-
-├── query\_db.py # Query utilities
-
-├── \*.ipynb # Analysis and visualization notebooks
-
-
-
-\---
-
-
-
-\## Data Model
-
-
-
-The project maintains a historical snapshot of job postings, enabling:
-
-
-
-\- Time-series analysis of hiring trends
-
-\- Detection of organizational shifts
-
-\- Comparison across companies and regions
-
-
-
-\---
-
-
-
-\## Use Cases
-
-
-
-\- Competitive intelligence for quantum computing companies
-
-\- Investment research and market analysis
-
-\- Tracking industry maturity and technical focus areas
-
-\- Evaluating hiring signals as proxies for strategic direction
-
-
-
-\---
-
-
-
-\## Future Enhancements
-
-
-
-\- Expanded company coverage (D-Wave, Pasqal, QuEra, etc.)
-
-\- Improved taxonomy for job classification
-
-\- Automated dashboards and reporting
-
-\- Cross-company comparative analytics
-
-\- Integration with external data sources
-
-
-
-\---
-
-
-
-\## Notes
-
-
-
-\- The database file is not included in the repository
-
-\- Visual outputs and generated data are excluded from version control
-
-\- This repository focuses on code and reproducibility
-
-
-
-\---
-
-
-
-\## Author
-
-
-
-Jacob Fong  
-
-Technology analyst with a focus on emerging technologies, data-driven research, and competitive intelligence.
-
-
-
-\---
-
-
-
-\## License
-
-
-
-(Optional — add later if needed)
-
+- Notebook and analysis artifacts may contain historical/local path examples.
+- Phase 5 is intended to remove compatibility shims after the compatibility window.

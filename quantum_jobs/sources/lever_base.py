@@ -4,8 +4,15 @@ from dataclasses import asdict
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 
-import requests
 from quantum_jobs.models import NormalizedJob
+
+
+def _default_session() -> Any:
+    # Lazy import so module import does not hard-fail in environments where
+    # network deps are intentionally unavailable for non-fetch tests/smoke checks.
+    import requests
+
+    return requests.Session()
 
 
 class LeverPostingsSource:
@@ -34,7 +41,7 @@ class LeverPostingsSource:
         timeout_s: int = 30,
         api_root: str = DEFAULT_API_ROOT,
         hosted_root: str = DEFAULT_HOSTED_ROOT,
-        session: Optional[requests.Session] = None,
+        session: Optional[Any] = None,
         mode_json: bool = True,
     ) -> None:
         self.company_slug = company_slug
@@ -43,7 +50,7 @@ class LeverPostingsSource:
         self.timeout_s = timeout_s
         self.api_root = api_root.rstrip("/")
         self.hosted_root = hosted_root.rstrip("/")
-        self.session = session or requests.Session()
+        self.session = session or _default_session()
         self.mode_json = mode_json
 
         base = f"{self.api_root}/{self.company_slug}"

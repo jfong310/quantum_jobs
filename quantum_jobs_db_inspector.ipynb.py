@@ -1,7 +1,5 @@
 import sqlite3
-from pathlib import Path
-
-DB_PATH = Path(r"C:\Users\warfm\PycharmProjects\PythonProject\AI Code\Quantum Jobs\quantum_jobs.db")
+from quantum_jobs.db.paths import DB_PATH
 
 conn = sqlite3.connect(DB_PATH)
 conn.execute("PRAGMA foreign_keys=ON;")
