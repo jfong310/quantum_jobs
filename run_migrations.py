@@ -7,11 +7,14 @@ is up-to-date.
 
 Typical usage:
 - Run this once after pulling code changes.
-- Run this after adding a new migration to migration_utils.py
+- Run this after adding a new migration.
 - You can also call it before running your collector.
 
 How to run:
-- From terminal (recommended):
+- Preferred package-aligned runner:
+    python scripts/run_migrations.py
+
+- Legacy compatibility runner:
     python run_migrations.py
 
 - Or from a notebook cell:
