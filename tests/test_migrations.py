@@ -2,19 +2,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from conftest import load_module_from_repo
-
-
-collector = load_module_from_repo("Quantum Jobs Collector.py", "quantum_jobs_collector_for_migrations")
-migrations = load_module_from_repo("migration_utils.py", "migration_utils_module")
+from quantum_jobs import db, migrations
 
 
 def test_run_all_migrations_is_idempotent(tmp_path: Path) -> None:
     db_path = tmp_path / "quantum_jobs.db"
 
-    conn = collector.connect_db(db_path)
+    conn = db.connect_db(str(db_path))
     try:
-        collector.init_schema(conn)
+        db.init_schema(conn)
         # Seed a row where pulled_date is NULL so backfill can be validated.
         conn.execute(
             """

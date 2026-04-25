@@ -4,8 +4,15 @@ from dataclasses import asdict
 from typing import Any, Dict, Iterable, List, Optional
 import time
 
-import requests
 from quantum_jobs.models import NormalizedJob
+
+
+def _default_session() -> Any:
+    # Lazy import so module import does not hard-fail in environments where
+    # network deps are intentionally unavailable for non-fetch tests/smoke checks.
+    import requests
+
+    return requests.Session()
 
 
 class GreenhouseBoardSource:
@@ -35,7 +42,7 @@ class GreenhouseBoardSource:
         timeout_s: int = 30,
         use_detail_endpoint: bool = False,
         detail_rate_limit_s: float = 0.0,
-        session: Optional[requests.Session] = None,
+        session: Optional[Any] = None,
     ) -> None:
         self.board_token = board_token
         self.company = company
@@ -43,7 +50,7 @@ class GreenhouseBoardSource:
         self.timeout_s = timeout_s
         self.use_detail_endpoint = use_detail_endpoint
         self.detail_rate_limit_s = detail_rate_limit_s
-        self.session = session or requests.Session()
+        self.session = session or _default_session()
 
         self.list_url = f"{self.GH_ROOT}/{self.board_token}/jobs"
 
@@ -76,7 +83,7 @@ class GreenhouseBoardSource:
                     if isinstance(detail, dict):
                         # Merge detail into list-level dict; detail wins on conflicts.
                         job_dict = {**j, **detail}
-                except requests.RequestException:
+                except Exception:
                     # Don’t fail the entire run if one detail fetch fails.
                     job_dict = j
 

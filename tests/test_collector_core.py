@@ -2,10 +2,7 @@ from __future__ import annotations
 
 import json
 
-from conftest import load_module_from_repo
-
-
-collector = load_module_from_repo("Quantum Jobs Collector.py", "quantum_jobs_collector")
+from quantum_jobs import collector
 
 
 def test_make_row_from_normalized_derives_expected_fields() -> None:

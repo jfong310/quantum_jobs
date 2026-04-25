@@ -492,8 +492,8 @@ class LeverSourceAdapter:
 
 def main() -> None:
     # Import here so the script still runs even if a source module is temporarily missing.
-    from collectors.sources.greenhouse_companies import ionq_source, psiquantum_source
-    from collectors.sources.lever_companies import rigetti_source, atomcomputing_source, quantinuum_source, qctrl_source
+    from quantum_jobs.sources.greenhouse_companies import ionq_source, psiquantum_source
+    from quantum_jobs.sources.lever_companies import rigetti_source, atomcomputing_source, quantinuum_source, qctrl_source
 
     SOURCES: List[JobSource] = [
         # Existing single-source (TeamMe) company

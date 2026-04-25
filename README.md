@@ -1,174 +1,50 @@
-\# Quantum Jobs Tracker
+# Quantum Jobs Tracker
 
+A data-driven tool for collecting and analyzing hiring trends across quantum computing companies.
 
+## Canonical runtime entry points
 
-A data-driven intelligence tool for analyzing hiring trends across quantum computing companies.
+Use these package-first entry points:
 
+- Collector: `python -m quantum_jobs.collector`
+- Collector (script): `python scripts/run_collector.py`
+- Migrations (script): `python scripts/run_migrations.py`
 
+## Project structure (Phase 5)
 
-\## Overview
+```text
+quantum_jobs/
+├── quantum_jobs/
+│   ├── cli/
+│   │   ├── collect.py
+│   │   └── migrate.py
+│   ├── db/
+│   │   ├── __init__.py
+│   │   └── paths.py
+│   ├── sources/
+│   ├── collector.py
+│   └── migrations.py
+├── scripts/
+│   ├── run_collector.py
+│   └── run_migrations.py
+├── legacy/                  # archived historical modules (non-canonical)
+└── tests/
+```
 
+## Database path behavior
 
+The canonical runtime DB path is centralized at `quantum_jobs.db.paths.DB_PATH` and intentionally resolves to `<repo-root>/quantum_jobs.db` for compatibility.
 
-The Quantum Jobs Tracker collects and analyzes job postings from leading quantum computing companies to provide insight into:
+## Windows Task Scheduler guidance
 
+Run through Python with quoted full paths:
 
+```powershell
+python "C:\path\to\quantum_jobs\scripts\run_migrations.py"
+python "C:\path\to\quantum_jobs\scripts\run_collector.py"
+```
 
-\- Company maturity and growth signals
+## Notes
 
-\- Shifts in technical and operational priorities
-
-\- Hiring trends across functions (engineering, research, product, etc.)
-
-\- Market-wide dynamics in the quantum ecosystem
-
-
-
-This project is designed as both:
-
-1\. A \*\*quantitative research tool\*\* for analyzing emerging technology markets  
-
-2\. A \*\*framework for competitive intelligence\*\* in frontier industries  
-
-
-
-\---
-
-
-
-\## Key Features
-
-
-
-\- Automated data collection from job board APIs (Greenhouse, Lever, etc.)
-
-\- Structured database of job postings over time
-
-\- Snapshot-based tracking for temporal analysis
-
-\- Visualization of hiring trends and role distribution
-
-\- Modular architecture for adding new companies and data sources
-
-
-
-\---
-
-
-
-\## Project Structure
-
-Quantum Jobs/
-
-├── collectors/ # Source adapters (Greenhouse, Lever, etc.)
-
-├── Quantum Jobs Collector.py # Main data collection script
-
-├── migration\_utils.py # Database schema management
-
-├── run\_migrations.py # Migration runner
-
-├── query\_db.py # Query utilities
-
-├── \*.ipynb # Analysis and visualization notebooks
-
-
-
-\---
-
-
-
-\## Data Model
-
-
-
-The project maintains a historical snapshot of job postings, enabling:
-
-
-
-\- Time-series analysis of hiring trends
-
-\- Detection of organizational shifts
-
-\- Comparison across companies and regions
-
-
-
-\---
-
-
-
-\## Use Cases
-
-
-
-\- Competitive intelligence for quantum computing companies
-
-\- Investment research and market analysis
-
-\- Tracking industry maturity and technical focus areas
-
-\- Evaluating hiring signals as proxies for strategic direction
-
-
-
-\---
-
-
-
-\## Future Enhancements
-
-
-
-\- Expanded company coverage (D-Wave, Pasqal, QuEra, etc.)
-
-\- Improved taxonomy for job classification
-
-\- Automated dashboards and reporting
-
-\- Cross-company comparative analytics
-
-\- Integration with external data sources
-
-
-
-\---
-
-
-
-\## Notes
-
-
-
-\- The database file is not included in the repository
-
-\- Visual outputs and generated data are excluded from version control
-
-\- This repository focuses on code and reproducibility
-
-
-
-\---
-
-
-
-\## Author
-
-
-
-Jacob Fong  
-
-Technology analyst with a focus on emerging technologies, data-driven research, and competitive intelligence.
-
-
-
-\---
-
-
-
-\## License
-
-
-
-(Optional — add later if needed)
-
+- Legacy top-level shim entry points were removed in Phase 5 cleanup.
+- Historical/analysis notebook artifacts remain in-repo; runtime collection/migration flows should use canonical entry points above.
