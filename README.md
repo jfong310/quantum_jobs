@@ -2,21 +2,15 @@
 
 A data-driven tool for collecting and analyzing hiring trends across quantum computing companies.
 
-## Canonical runtime entry points (Phase 1–4 state)
+## Canonical runtime entry points
 
-Use these package-aligned scripts as the primary operational entry points:
+Use these package-first entry points:
 
-- Collector: `python scripts/run_collector.py`
-- Migrations: `python scripts/run_migrations.py`
+- Collector: `python -m quantum_jobs.collector`
+- Collector (script): `python scripts/run_collector.py`
+- Migrations (script): `python scripts/run_migrations.py`
 
-Legacy compatibility entry points are still present for backward compatibility during the refactor window:
-
-- `Quantum Jobs Collector.py`
-- `run_migrations.py`
-- `migration_utils.py`
-- `collectors/sources/*` shims
-
-## Project structure (current)
+## Project structure (Phase 5)
 
 ```text
 quantum_jobs/
@@ -33,40 +27,24 @@ quantum_jobs/
 ├── scripts/
 │   ├── run_collector.py
 │   └── run_migrations.py
-├── legacy/
-│   ├── collector_legacy.py
-│   └── migration_utils_legacy.py
+├── legacy/                  # archived historical modules (non-canonical)
 └── tests/
 ```
 
 ## Database path behavior
 
-The canonical runtime DB path is centralized at:
-
-- `quantum_jobs.db.paths.DB_PATH`
-
-It intentionally resolves to the repository root file:
-
-- `<repo-root>/quantum_jobs.db`
-
-This behavior is preserved for compatibility.
+The canonical runtime DB path is centralized at `quantum_jobs.db.paths.DB_PATH` and intentionally resolves to `<repo-root>/quantum_jobs.db` for compatibility.
 
 ## Windows Task Scheduler guidance
 
-For reliability, run scripts through Python and quote full paths (especially filenames with spaces):
+Run through Python with quoted full paths:
 
 ```powershell
 python "C:\path\to\quantum_jobs\scripts\run_migrations.py"
 python "C:\path\to\quantum_jobs\scripts\run_collector.py"
 ```
 
-Legacy file with spaces should also be quoted if used:
-
-```powershell
-python "C:\path\to\quantum_jobs\Quantum Jobs Collector.py"
-```
-
 ## Notes
 
-- Notebook and analysis artifacts may contain historical/local path examples.
-- Phase 5 is intended to remove compatibility shims after the compatibility window.
+- Legacy top-level shim entry points were removed in Phase 5 cleanup.
+- Historical/analysis notebook artifacts remain in-repo; runtime collection/migration flows should use canonical entry points above.

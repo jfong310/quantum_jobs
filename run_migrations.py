@@ -23,24 +23,11 @@ How to run:
 Make sure DB_PATH points at the same DB file your collector uses.
 """
 
-from migration_utils import connect_db, run_all_migrations
-from quantum_jobs.db.paths import DB_PATH
+from quantum_jobs.cli.migrate import main as migrate_main
 
 
 def main() -> None:
-    conn = connect_db(str(DB_PATH))
-    try:
-        applied = run_all_migrations(conn)
-    finally:
-        conn.close()
-
-    print(f"DB: {DB_PATH.resolve()}")
-    if applied:
-        print("Applied migrations:")
-        for mid in applied:
-            print(f"  - {mid}")
-    else:
-        print("No migrations to apply (schema is up to date).")
+    migrate_main()
 
 
 if __name__ == "__main__":
