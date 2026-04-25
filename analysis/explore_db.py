@@ -3,17 +3,30 @@
 from __future__ import annotations
 
 import sqlite3
+from pathlib import Path
 
 import pandas as pd
 
 
+cwd = Path.cwd().resolve()
+repo_root = next((p for p in [cwd, *cwd.parents] if (p / "quantum_jobs").is_dir()), cwd)
+
 try:
-    from quantum_jobs.db.paths import DB_PATH
+    from quantum_jobs.db.paths import DB_PATH as PROJECT_DB_PATH
+
+    db_path = Path(PROJECT_DB_PATH).resolve()
 except Exception:
-    DB_PATH = "quantum_jobs.db"
+    db_path = (repo_root / "quantum_jobs.db").resolve()
 
+print(f"Using database: {db_path}")
 
-conn = sqlite3.connect(str(DB_PATH))
+if not db_path.exists():
+    raise FileNotFoundError(
+        f"Database not found at {db_path}. "
+        "Expected the project database at repo root; refusing to create a blank SQLite file."
+    )
+
+conn = sqlite3.connect(f"file:{db_path}?mode=rw", uri=True)
 
 query = """
 SELECT
