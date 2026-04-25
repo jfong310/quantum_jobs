@@ -49,3 +49,7 @@ build/
 *.csv
 *.parquet
 
+# Analysis workspace outputs
+analysis/outputs/*
+!analysis/outputs/
+!analysis/outputs/.gitkeep
