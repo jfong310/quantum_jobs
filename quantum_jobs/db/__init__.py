@@ -236,6 +236,52 @@ def load_snapshot_map(conn: sqlite3.Connection, company: str, pulled_at: str) ->
     return out
 
 
+def load_canonical_daily_job_counts(
+    conn: sqlite3.Connection, company: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Return one daily count per company using a canonical snapshot definition.
+
+    Why this exists:
+    - Some days can have multiple collector runs for the same company.
+    - Naively grouping all rows by date inflates job counts on those days.
+    - We instead select the latest `pulled_at` snapshot for each
+      (company, date) pair and count distinct job_id values in that snapshot.
+    """
+    where_clause = "WHERE company = ?" if company else ""
+    params = (company,) if company else ()
+
+    rows = conn.execute(
+        f"""
+        WITH daily_latest AS (
+            SELECT
+                company,
+                COALESCE(pulled_date, substr(pulled_at, 1, 10)) AS snapshot_date,
+                MAX(pulled_at) AS latest_pulled_at
+            FROM job_snapshots
+            {where_clause}
+            GROUP BY company, snapshot_date
+        )
+        SELECT
+            s.company,
+            d.snapshot_date,
+            COUNT(DISTINCT s.job_id) AS job_count
+        FROM job_snapshots s
+        JOIN daily_latest d
+          ON s.company = d.company
+         AND COALESCE(s.pulled_date, substr(s.pulled_at, 1, 10)) = d.snapshot_date
+         AND s.pulled_at = d.latest_pulled_at
+        GROUP BY s.company, d.snapshot_date
+        ORDER BY d.snapshot_date, s.company
+        """,
+        params,
+    ).fetchall()
+    return [
+        {"company": company_name, "snapshot_date": snapshot_date, "job_count": job_count}
+        for (company_name, snapshot_date, job_count) in rows
+    ]
+
+
 def _diff_fields(j: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "title": j.get("title"),
