@@ -29,13 +29,25 @@ if not db_path.exists():
 conn = sqlite3.connect(f"file:{db_path}?mode=rw", uri=True)
 
 query = """
+WITH daily_latest AS (
+    SELECT
+        company,
+        COALESCE(pulled_date, substr(pulled_at, 1, 10)) AS snapshot_date,
+        MAX(pulled_at) AS latest_pulled_at
+    FROM job_snapshots
+    GROUP BY company, snapshot_date
+)
 SELECT
-    company,
-    COALESCE(pulled_date, substr(pulled_at, 1, 10)) AS snapshot_date,
-    COUNT(*) AS job_count
-FROM job_snapshots
-GROUP BY company, snapshot_date
-ORDER BY snapshot_date DESC, company
+    s.company,
+    d.snapshot_date,
+    COUNT(DISTINCT s.job_id) AS job_count
+FROM job_snapshots s
+JOIN daily_latest d
+  ON s.company = d.company
+ AND COALESCE(s.pulled_date, substr(s.pulled_at, 1, 10)) = d.snapshot_date
+ AND s.pulled_at = d.latest_pulled_at
+GROUP BY s.company, d.snapshot_date
+ORDER BY d.snapshot_date DESC, s.company
 LIMIT 20;
 """
 
