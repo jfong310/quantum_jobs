@@ -171,13 +171,14 @@ def build_sources() -> List[JobSource]:
 
 
 def main() -> None:
+    pulled_at = utc_now_iso()
     conn = migrations.connect_db(str(DB_PATH))
     try:
+        init_schema(conn)
         migrations.run_all_migrations(conn)
     finally:
         conn.close()
 
-    pulled_at = utc_now_iso()
     conn = connect_db(str(DB_PATH))
     try:
         init_schema(conn)
