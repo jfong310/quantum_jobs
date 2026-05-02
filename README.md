@@ -37,12 +37,19 @@ The canonical runtime DB path is centralized at `quantum_jobs.db.paths.DB_PATH` 
 
 ## Windows Task Scheduler guidance
 
-Run through Python with quoted full paths:
+### Direct Execution (No Redirection)
+If you do not need to capture output to a file:
+- **Program/script:** `C:\path\to\venv\Scripts\python.exe`
+- **Add arguments:** `"C:\path\to\repo\scripts\run_collector.py"`
 
-```powershell
-python "C:\path\to\quantum_jobs\scripts\run_migrations.py"
-python "C:\path\to\quantum_jobs\scripts\run_collector.py"
-```
+### Execution with Logging (Redirection)
+If you use shell features like `/c` or redirection (`>>`), you **must** use `cmd.exe` as the entry point. Using `python.exe` with `/c` will result in a **(0x2)** error.
+
+- **Program/script:** `cmd.exe`
+- **Add arguments:** `/c ""C:\path\to\venv\Scripts\python.exe" "C:\path\to\repo\scripts\run_collector.py" >> "C:\path\to\repo\scheduler_run.log" 2>&1"`
+- **Start in:** `C:\path\to\repo`
+
+*Note: Use double-quotes around the entire command string after `/c` if paths contain spaces.*
 
 ## Notes
 
