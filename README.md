@@ -9,6 +9,17 @@ Use these package-first entry points:
 - Collector: `python -m quantum_jobs.collector`
 - Collector (script): `python scripts/run_collector.py`
 - Migrations (script): `python scripts/run_migrations.py`
+- Visualize Schedule: `python scripts/visualize_schedule.py`
+
+## Run History Visualization
+
+The collector now automatically generates a `run_history.png` file in the repository root after each run. This is a GitHub-style calendar heatmap that shows:
+- **Green**: Days the collector ran successfully.
+- **White**: Days with no data (holes).
+- **Gray**: Days outside the recent tracking window (default 90 days).
+
+You can manually regenerate this image at any time by running:
+`python scripts/visualize_schedule.py`
 
 ## Project structure (Phase 5)
 

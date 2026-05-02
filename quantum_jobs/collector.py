@@ -215,6 +215,12 @@ def main() -> None:
     finally:
         conn.close()
 
+    try:
+        from .visualizer import generate_run_history_heatmap
+        generate_run_history_heatmap(str(DB_PATH), "run_history.png")
+    except Exception as e:
+        print(f"Warning: Could not generate run history visualization: {e}")
+
 
 if __name__ == "__main__":
     main()
