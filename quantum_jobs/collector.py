@@ -216,10 +216,10 @@ def main() -> None:
         conn.close()
 
     try:
-        from .visualizer import generate_run_history_heatmap
-        generate_run_history_heatmap(str(DB_PATH), "run_history.png")
+        from .visualizer import print_console_heatmap
+        print_console_heatmap(str(DB_PATH))
     except Exception as e:
-        print(f"Warning: Could not generate run history visualization: {e}")
+        print(f"Warning: Could not print run history summary: {e}")
 
 
 if __name__ == "__main__":

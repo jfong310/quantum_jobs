@@ -102,6 +102,35 @@ def generate_run_history_heatmap(db_path: str, output_path: str, days: int = 90)
     plt.close()
     print(f"Run history visualization saved to: {output_path}")
 
+def print_console_heatmap(db_path: str, weeks: int = 4):
+    """
+    Prints a compact Unicode heatmap of runs to the console.
+    """
+    run_dates = get_run_dates(db_path)
+    today = datetime.now().date()
+
+    # Start on a Monday
+    start_date = today - timedelta(days=today.weekday() + (weeks - 1) * 7)
+
+    print(f"\nRun History ({weeks} weeks):")
+    print("      M T W T F S S")
+
+    current = start_date
+    for w in range(weeks):
+        week_str = current.strftime("%b %d").ljust(6)
+        line = [week_str]
+        for d in range(7):
+            date_str = current.strftime("%Y-%m-%d")
+            if date_str in run_dates:
+                line.append("█") # Run
+            elif current > today:
+                line.append(" ") # Future
+            else:
+                line.append("░") # Gap
+            current += timedelta(days=1)
+        print(" ".join(line))
+    print("Legend: █ Run | ░ Gap\n")
+
 if __name__ == "__main__":
     from .db.paths import DB_PATH
     generate_run_history_heatmap(str(DB_PATH), "run_history.png")

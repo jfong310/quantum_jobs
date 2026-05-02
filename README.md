@@ -13,13 +13,27 @@ Use these package-first entry points:
 
 ## Run History Visualization
 
-The collector now automatically generates a `run_history.png` file in the repository root after each run. This is a GitHub-style calendar heatmap that shows:
-- **Green**: Days the collector ran successfully.
-- **White**: Days with no data (holes).
-- **Gray**: Days outside the recent tracking window (default 90 days).
+The collector automatically prints a compact **Console Run History** summary at the end of each run. This allows you to see the run status directly in your terminal or log files without generating new file artifacts.
 
-You can manually regenerate this image at any time by running:
+Example output:
+```text
+Run History (4 weeks):
+      M T W T F S S
+Apr 13 ░ ░ ░ ░ ░ █ ░
+Apr 20 ░ ░ ░ ░ ░ ░ ░
+Apr 27 ░ █ ░ ░ ░ █ ░
+May 04 ░ ░ ░ ░ ░ ░ ░
+Legend: █ Run | ░ Gap
+```
+
+- **█**: Collector ran successfully on this day.
+- **░**: No data collected for this day (gap).
+
+To view this summary manually, run:
 `python scripts/visualize_schedule.py`
+
+If you prefer a visual image, you can still generate one using:
+`python scripts/visualize_schedule.py --png`
 
 ## Project structure (Phase 5)
 
